@@ -42,6 +42,7 @@
 ```
 Market: tom = 0, carr = 1, corn = 2, broc = 3
 Table: / t1.ca2 /  co2.b1 / b1.ca2 /
+
 Bob: введите, какую карту будем тянуть: t1.ca2
 Bob: draw t1.ca2
 Leo: введите, какую карту будем тянуть: co2.b1
@@ -50,12 +51,14 @@ Extra card: b1.ca2
 -----
 Market: tom = 0, carr = 3, corn = 2, broc = 4
 Table: / ca2.b1 / t3 / co1.t2 /
+
 Leo: co1.t2
 Bob: ca2.b1
 Extra: t3
 -----
 Market: tom = 3, carr = 3, corn = 2, broc = 4
 Table: / b2.co1 / ca1.co2 / co3 /
+
 Bob: ca1.co2
 Leo: co3
 Extra: b2.ca1
