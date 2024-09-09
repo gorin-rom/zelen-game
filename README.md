@@ -71,7 +71,25 @@ Leo WIN!!!
 
 ## Формат save-файла
 
-
+```json
+{
+  "table": "t1.ca2,  co2.b1, b1.ca2",
+  "deck": "...",
+  "current_player_index": 0,
+  "players": [
+    {
+      "name": "Bob",
+      "hand": "t1.ca2, ca2.b1, ca1.co2",
+      "is_human": true
+    },
+    {
+      "name": "Leo",
+      "hand": "b3, co1.b2. t2.ca1",
+      "is_human": false
+    }
+  ]
+}
+```
 
 
 
