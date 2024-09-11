@@ -15,9 +15,10 @@ class Card:
         self.numb = numb
 
     def __repr__(self):
-        return f'{self.vegs}{self.numb}
-
-
+        if vegetable == 1:
+            return f'{self.vegs}{self.numb}'
+        if vegetable == 2:
+            return f'{self.vegs}{self.numb}.{self.vegs}{self.numb}'
 
 
 
