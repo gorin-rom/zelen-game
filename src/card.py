@@ -15,7 +15,7 @@ class Card:
         self.numb = numb
 
     def __repr__(self):
-        return f'{self.vegs}{self.numb}'
+        return f'{self.vegs}{self.numb}
 
 
 
