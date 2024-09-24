@@ -2,8 +2,9 @@
 from typing import Self
 
 class Card:
-    VEGETABLES = ['t', 'ca', 'co', 'b', 'e']
+    VEGETABLES = ['T', 'М', 'К', 'Б', 'З']
     NUMBERS = list(range(4))
+    #PRICE = list(range(4))
 
     def __init__(self, vegs: str, vegs2: str, numb: int, numb2: int):
         if vegs not in Card.VEGETABLES:
@@ -22,6 +23,9 @@ class Card:
         if vegetable == 2:
             return f'{self.vegs}{self.numb}.{self.vegs2}{self.numb2}'
 
-
+    def __eq__(self, other):
+        if isinstance(other, str):
+            other = Card.load(other)
+        return self.vegs == other.vegs and self.numb == other.numb
 
 
