@@ -1,6 +1,5 @@
 """Карты Зелень"""
 
-
 class Card:
     VEGETABLES = ['Т', 'М', 'К', 'Б', 'З']
     NUMBERS = list(range(1, 4))
@@ -28,5 +27,4 @@ class Card:
 
     @staticmethod
     def load(text: str):
-        """From 'БББ' to Card('Б', 3)."""
         return Card(veg=text[0], number=int(text[1]))
