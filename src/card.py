@@ -1,31 +1,32 @@
 """Карты Зелень"""
-from typing import Self
+
 
 class Card:
-    VEGETABLES = ['T', 'М', 'К', 'Б', 'З']
-    NUMBERS = list(range(4))
-    #PRICE = list(range(4))
+    VEGETABLES = ['Т', 'М', 'К', 'Б', 'З']
+    NUMBERS = list(range(1, 4))
 
-    def __init__(self, vegs: str, vegs2: str, numb: int, numb2: int):
-        if vegs not in Card.VEGETABLES:
+    def __init__(self, veg: str, number: int):
+        if veg not in Card.VEGETABLES:
             raise ValueError
-        if numb not in Card.NUMBERS:
+        if number not in Card.NUMBERS:
             raise ValueError
 
-        self.vegs = vegs
-        self.vegs2 = vegs2
-        self.numb = numb
-        self.numb2 = numb2
+        self.veg = veg
+        self.number = number
 
     def __repr__(self):
-        if vegetable == 1:
-            return f'{self.vegs}{self.numb}'
-        if vegetable == 2:
-            return f'{self.vegs}{self.numb}.{self.vegs2}{self.numb2}'
+        return f'{self.veg}{self.number}'
 
     def __eq__(self, other):
-        if isinstance(other, str):
-            other = Card.load(other)
-        return self.vegs == other.vegs and self.numb == other.numb
+        return self.veg == other.veg and self.number == other.number
 
+    def score(self, other):
+        return self.veg * other.veg
 
+    def save(self):
+        return repr(self)
+
+    @staticmethod
+    def load(text: str):
+        """From 'БББ' to Card('Б', 3)."""
+        return Card(veg=text[0], number=int(text[1]))
