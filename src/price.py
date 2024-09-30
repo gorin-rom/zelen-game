@@ -1,7 +1,6 @@
 class Price:
     def __init__(self, Т=0, М=0, К=0, Б=0, З=0):
         if all(0 <= vegs <= 5 for vegs in [Т, М, К, Б, З]):
-            
             self.Т = Т
             self.М = М
             self.К = К
