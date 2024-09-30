@@ -28,3 +28,13 @@ class Card:
     @staticmethod
     def load(text: str):
         return Card(veg=text[0], number=int(text[1]))
+
+    @staticmethod
+    def all_cards(vegetables: list[str] | None = None, numbers: None | list[int] = None):
+        if vegetables is None:
+            vegetables = Card.VEGETABLES
+        if numbers is None:
+            numbers = Card.NUMBERS
+        cards = [Card(veg=veg, number=num) for veg in vegetables for num in numbers]
+        return cards
+
