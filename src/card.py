@@ -1,5 +1,4 @@
 """Карты Зелень"""
-
 class Card:
     VEGETABLES = ['Т', 'М', 'К', 'Б', 'З']
     SIZE = 3
@@ -9,6 +8,7 @@ class Card:
             raise ValueError
         for v in self.VEGETABLES:
             setattr(self, v, kwargs[v])
+
 
     def __repr__(self):
         for v in self.VEGETABLES:
