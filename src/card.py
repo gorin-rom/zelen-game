@@ -2,39 +2,39 @@
 
 class Card:
     VEGETABLES = ['Т', 'М', 'К', 'Б', 'З']
-    NUMBERS = list(range(1, 4))
+    SIZE = 3
 
-    def __init__(self, veg: str, number: int):
-        if veg not in Card.VEGETABLES:
+    def __init__(self, **kwargs):
+        if not kwargs or sum(kwargs.values()) != self.SIZE:
             raise ValueError
-        if number not in Card.NUMBERS:
-            raise ValueError
-
-        self.veg = veg
-        self.number = number
+        for v in self.VEGETABLES:
+            setattr(self, v, kwargs[v])
 
     def __repr__(self):
-        return f'{self.veg}{self.number}'
+        for v in self.VEGETABLES:
+            return v * self.v
 
     def __eq__(self, other):
-        return self.veg == other.veg and self.number == other.number
+        return self.Т == other.Т and self.М == other.М \
+            and self.К == other.К and self.Б == other.Б and self.З == other.З
 
-    def score(self, other):
-        return self.veg * other.veg
+    def score(self, price):
+        return self.Т * price.Т + self.М * price.М + self.К * price.К + self.Б * price.Б + self.З * price.З
 
     def save(self):
         return repr(self)
 
     @staticmethod
     def load(text: str):
-        return Card(veg=text[0], number=int(text[1]))
+        return Card(text.count('Т'), text.count('М'), text.count('К'), text.count('Б'), text.count('З'))
 
     @staticmethod
-    def all_cards(vegetables: list[str] | None = None, numbers: None | list[int] = None):
-        if vegetables is None:
-            vegetables = Card.VEGETABLES
-        if numbers is None:
-            numbers = Card.NUMBERS
-        cards = [Card(veg=veg, number=num) for veg in vegetables for num in numbers]
+    def all_cards(VEGETABLES: list[str] | None = None):
+        if VEGETABLES is None:
+            VEGETABLES = Card.VEGETABLES + Card.VEGETABLES
+        cards = [Card.load(veg1 * 2 + veg2 * 1) for veg1 in VEGETABLES for veg2 in VEGETABLES ]
+        cards += cards.copy()
+        r_card = [Card.load(veg * 3) for veg in VEGETABLES]
+        for card in r_card:
+            cards.remove(card)
         return cards
-
