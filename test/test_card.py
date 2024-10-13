@@ -1,11 +1,12 @@
 import pytest
 
 from src.card import Card
+from src.card import VegBox
 
 def test_init():
-    c = Card('Т', 3)
-    assert c.veg == 'Т'
-    assert c.number == 3
+    c = Card('ТТТ')
+    assert c.Т == 3
+
 
 def test_save():
     c = Card('Т', 3)
