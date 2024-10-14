@@ -1,42 +1,52 @@
 import pytest
 
 from src.card import Card
-from src.card import VegBox
+from src.price import VegBox
 
 def test_init():
-    c = Card('ТТТ')
-    assert c.Т == 3
+    c = Card(М=2, Т=1)
+    assert c.М == 2
+    assert c.Т == 1
+    assert c.К == 0
+    assert c.Б == 0
+    assert c.З == 0
 
 
 def test_save():
-    c = Card('Т', 3)
-    assert repr(c) == 'Т3'
-    assert c.save() == 'Т3'
-    c = Card('М', 2)
-    assert repr(c) == 'М2'
-    assert c.save() == 'М2'
+    c = Card(Т=3)
+    assert repr(c) == 'ТТТ'
+    assert c.save() == 'ТТТ'
+    c = Card(М=2, К=1)
+    assert repr(c) == 'ММК'
+    assert c.save() == 'ММК'
+
 def test_load():
-    b = 'Б3'
-    c = Card.load(b)
-    assert c == Card('Б', 3)
+    m = 'ММК'
+    c = Card.load(m)
+    assert c == Card(М=2, К=1)
+
 def test_eq():
-    c1 = Card('Т', 3)
-    c2 = Card('Т', 3)
-    c3 = Card('Б', 1)
+    c1 = Card(Т=3)
+    c2 = Card(Т=3)
+    c3 = Card(Б=1, З=2)
     assert c1 == c2
     assert c1 != c3
     assert c2 != c3
+
+def test_score():
+    q = Card(М=2, З=1)
+    p = VegBox(1, 4, 2, 3, 5)
+    assert q.score(p) == 4 * 2 + 5
+
 def test_all_cards():
-    cards = Card.all_cards(['Б', 'М'], numbers=[1, 2, 3])
+    cards = Card.all_cards(['Т', 'М', 'К', 'Б', 'З'])
     expected_cards = [
-        Card.load('Б1'),
-        Card.load('Б2'),
-        Card.load('Б3'),
-        Card.load('М1'),
-        Card.load('М2'),
-        Card.load('М3')
+        Card.load('БММ'),
+        Card.load('ББК'),
+        Card.load('БББ'),
+        Card.load('ТТМ'),
+        Card.load('ЗЗТ'),
+        Card.load('ККБ')
     ]
     assert cards == expected_cards
 
-    cards = Card.all_cards()
-    assert len(cards) == 4 * 6
