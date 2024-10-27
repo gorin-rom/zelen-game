@@ -3,29 +3,33 @@ import pytest
 from src.deck import Deck
 from src.card import Card
 
-cards = [Card('Т', 1), Card('М', 3), Card('Б', 2)]
+cards = [Card.load('ТТМ'), Card.load('ММК'), Card.load('ЗЗБ'), Card.load('ЗЗЗ')]
+
 
 def test_init():
-    d = Deck(cards=cards)
+    d = Deck(cards)
     assert d.cards == cards
+
 
 def test_save():
     d = Deck(cards=cards)
-    assert d.save() == 'Т1 М3 Б2'
+    assert d.save() == 'ТТМ ММК БЗЗ ЗЗЗ'
 
     d = Deck(cards=[])
     assert d.save() == ''
 
+
 def test_load():
-    d = Deck.load('Т1 М3 Б2')
+    d = Deck.load('ТТМ ММК БЗЗ ЗЗЗ')
     expected_deck = Deck(cards)
     assert d == expected_deck
 
+
 def test_draw_card():
-    d1 = Deck.load('Т1 М3 Б2')
-    d2 = Deck.load('Т1 М3')
+    d1 = Deck.load('ТТМ ММК БЗЗ ЗЗЗ')
+    d2 = Deck.load('ТТМ ММК БЗЗ')
     c = d1.draw_card()
-    assert c == Card.load('Б2')
+    assert c == Card.load('ЗЗЗ')
     assert d1 == d2
 
 

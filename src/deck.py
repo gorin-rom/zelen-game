@@ -11,13 +11,13 @@ class Deck:
             random.shuffle(cards)
         self.cards: list[Card] = cards
 
-    def __repr__(self):
-        return self.save()
-
     def __eq__(self, other):
         if isinstance(other, str):
             other = Deck.load(other)
         return self.cards == other.cards
+
+    def __repr__(self):
+        return self.save()
 
     def save(self) -> str:
         scards = [c.save() for c in self.cards]
