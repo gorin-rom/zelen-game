@@ -13,11 +13,10 @@ class Card:
         return ''.join(v * getattr(self, v) for v in self.VEGETABLES)
 
     def __eq__(self, other):
-        c = None
         for v in self.VEGETABLES:
-            c = getattr(self, v) == getattr(other, v)
-        return c
-
+            if getattr(self, v) != getattr(other, v):
+                return False
+        return True
     def score(self, price):
         total = 0
         for v in self.VEGETABLES:
@@ -29,7 +28,8 @@ class Card:
 
     @staticmethod
     def load(text: str):
-        return Card(text.count('Т') and text.count('М') and text.count('К') and text.count('Б') and text.count('З'))
+        d = {v: text.count(v) for v in Card.VEGETABLES}
+        return Card(**d)
 
     @staticmethod
     def all_cards(VEGETABLES: list[str] | None):
