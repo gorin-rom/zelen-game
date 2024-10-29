@@ -2,13 +2,22 @@ import typing
 
 from src.card import Card
 
+
 class Hand:
-    def __init__(self, cards:  list[Card] = []):
-        cards = []
+    def __init__(self, cards:  list[Card] | None = None):
+        if cards is None:
+            cards = []
         self.cards: list[Card] = cards
+        '''for v in Card.VEGETABLES:
+            setattr(self, v, kwargs.get(v, 0))'''
 
     def __repr__(self):
         return self.save()
+
+    def save(self) -> str:
+        scards = [c.save() for c in self.cards]
+        s = ' '.join(scards)
+        return s
 
     def __eq__(self, other):
         if isinstance(other, str):
@@ -30,3 +39,4 @@ class Hand:
 
     def score(self, other):
         return self.veg * other.veg
+     #   return Card.score
