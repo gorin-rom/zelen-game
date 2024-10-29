@@ -9,17 +9,19 @@ class VegBox:
     def __init__(self, **kwargs):
         for v in self.VEGETABLES:
             setattr(self, v, kwargs.get(v))
-        self.d = kwargs.copy()
+        #self.d = kwargs.copy()
         self.validate_vegetables(kwargs.keys())
-        self.validate_values()
+        self.validate_values(kwargs.values())
 
     def validate_vegetables(self, symbols):
-        if symbols not in self.VEGETABLES:
-            raise ValueError
+        for v in symbols:
+            if v not in self.VEGETABLES:
+                raise ValueError
 
-    def validate_values(self, **kwargs):
-        if kwargs.values() not in range(6):
-            raise ValueError
+    def validate_values(self, values):
+        for v in values:
+            if not 0 <= v <= VegBox.MAX_PRICE:
+                raise ValueError
 
     def __repr__(self):
         return ''.join(list(f'{v}:{getattr(self, v)} ' for v in self.VEGETABLES))
@@ -30,6 +32,10 @@ class VegBox:
                 return False
         return True
 
+    def save(self):
+        return repr(self)
+
+
     def add(self, other: str | dict | Self | Card):
         if isinstance(other, VegBox):
             other = other.d
@@ -37,9 +43,5 @@ class VegBox:
             other = list(other.keys())
         if isinstance(other, Card):
             other = list(str(other))
-        if isinstance(other, str):
-            other = list(other)
         for v in other:
-            self.d[v] = (1 + self.d.get(v, 0)) % (VegBox.MAX_PRICE + 1)
-
-
+            self.setattr(self, v, ) == (1 + self.getattr(v)) % (1 + VegBox.MAX_PRICE)
