@@ -1,12 +1,13 @@
-class GameServer:
+#class GameServer:
 
 from src.card import Card
 from src.deck import Deck
 from src.player import Player
 from src.price import VegBox
 
+
 class GameState:
-    def __init__(self, players: list[Player], deck: Deck, current_player: int = 0, price: VegBox):
+    def __init__(self, players: list[Player], deck: Deck, price: VegBox, current_player: int = 0):
         self.players: list[Player] = players
         self.deck: Deck = deck
         self._current_player: int = current_player
@@ -16,7 +17,6 @@ class GameState:
         return self.players[self._current_player]
 
     def __eq__(self, other):
-
         if self.players != other.players:
             return False
         if self.deck != other.deck:
@@ -40,7 +40,7 @@ class GameState:
         return cls(
             players=players,
             deck=Deck.load(data["deck"]),
-            price=Card.load(data["price"]),
+            price=VegBox.load(data["price"]),
             current_player=int(data["current_player_index"]),
         )
 
