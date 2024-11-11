@@ -31,3 +31,8 @@ def test_add():
     assert v.К == 3
     assert v.Б == 5
 
+
+def test_load():
+    c = 'Т:4, М:0, К:3, Б:2, З:1'
+    assert VegBox.load(c) == VegBox(Т=4, М=0, К=3, Б=2, З=1)
+

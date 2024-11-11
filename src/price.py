@@ -8,8 +8,7 @@ class VegBox:
 
     def __init__(self, **kwargs):
         for v in self.VEGETABLES:
-            setattr(self, v, kwargs.get(v))
-        #self.d = kwargs.copy()
+            setattr(self, v, kwargs.get(v, 0))
         self.validate_vegetables(kwargs.keys())
         self.validate_values(kwargs.values())
 
@@ -35,13 +34,21 @@ class VegBox:
     def save(self):
         return repr(self)
 
-
     def add(self, other: str | dict | Self | Card):
         if isinstance(other, VegBox):
-            other = other.d
+            other = other.VEGETABLES
         if isinstance(other, dict):
             other = list(other.keys())
         if isinstance(other, Card):
             other = list(str(other))
         for v in other:
-            self.setattr(self, v, ) == (1 + self.getattr(v)) % (1 + VegBox.MAX_PRICE)
+            setattr(self, v, (getattr(self, v) + 1) % (1 + VegBox.MAX_PRICE))
+
+    @classmethod
+    def load(cls, data):
+        items = data.split(', ')
+        params = {item.split(':')[0]: int(item.split(':')[1]) for item in items}
+        return cls(**params)
+
+
+
