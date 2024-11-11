@@ -48,7 +48,7 @@ def test_eq():
 def test_score():
     q = Card(М=2, З=1)
     p = VegBox(Т=1, М=4, К=2, Б=3, З=5)
-    assert p.score(q) == 4 * 2 + 5
+    assert q.score(p) == 4 * 2 + 5
 
 
 def test_all_cards():
