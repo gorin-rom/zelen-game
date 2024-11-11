@@ -34,9 +34,9 @@ def test_add_card():
     assert repr(h) == 'БЗЗ ТКК МММ ТТТ БББ'
 
 def test_score():
-    h = Hand(Т=1, Б=2)
-    p = VegBox(1, 5, 3, 2, 4)
-    assert h.score(p) == 2 + 2 * 3
+    h = Hand(cards=[Card.load('ТББ')])
+    p = VegBox(Т=1, М=5, К=3, Б=2, З=4)
+    assert h.score(p) == 1 + 2 * 2
 
 
 
