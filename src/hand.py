@@ -1,6 +1,7 @@
 import typing
 
 from src.card import Card
+from src.price import VegBox
 
 
 class Hand:
@@ -23,7 +24,7 @@ class Hand:
         return self.cards == other.cards
 
     @classmethod
-    def load(cls, text: str) -> 'Hand':
+    def load(cls, text: str):
         cards = [Card.load(s) for s in text.split()]
         return cls(cards=cards)
 
@@ -35,8 +36,8 @@ class Hand:
             return sum(getattr(card, name) for card in self.cards)
         raise AttributeError
 
-    def score(self, other):
-        return sum(getattr(self, v) * getattr(other, v) for v in Card.VEGETABLES)
+    def score(self, price: VegBox):
+        return sum(getattr(self, v) * getattr(price, v) for v in Card.VEGETABLES)
 
 
     #   return Card.score

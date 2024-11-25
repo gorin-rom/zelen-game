@@ -7,7 +7,7 @@ from src.card import Card
 class Deck:
     def __init__(self, cards: None | list[Card]):
         if cards is None:
-            cards = Card.all_cards()
+            cards = Card.all_cards(None)
             random.shuffle(cards)
         self.cards: list[Card] = cards
 

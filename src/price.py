@@ -23,7 +23,7 @@ class VegBox:
                 raise ValueError
 
     def __repr__(self):
-        return ''.join(list(f'{v}:{getattr(self, v)} ' for v in self.VEGETABLES))
+        return ' '.join(list(f'{v}:{getattr(self, v)}' for v in self.VEGETABLES))
 
     def __eq__(self, other):
         for v in self.VEGETABLES:
@@ -45,8 +45,11 @@ class VegBox:
             setattr(self, v, (getattr(self, v) + 1) % (1 + VegBox.MAX_PRICE))
 
     @classmethod
-    def load(cls, data):
-        items = data.split(', ')
+    def load(cls, data: str):
+        """
+        data format: Т:2 М:1 К:4 Б:0 З:3
+        """
+        items = data.split()
         params = {item.split(':')[0]: int(item.split(':')[1]) for item in items}
         return cls(**params)
 

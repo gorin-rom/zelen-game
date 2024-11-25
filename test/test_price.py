@@ -20,7 +20,7 @@ def test_valid():
 
 def test_save():
     p = VegBox(Т=4, М=2, К=3, Б=1, З=0)
-    assert repr(p) == 'Т:4 М:2 К:3 Б:1 З:0 '
+    assert repr(p) == 'Т:4 М:2 К:3 Б:1 З:0'
 
 
 def test_add():
@@ -33,6 +33,8 @@ def test_add():
 
 
 def test_load():
-    c = 'Т:4, М:0, К:3, Б:2, З:1'
+    c = 'Т:4 М:0 К:3 Б:2 З:1'
+    vb = VegBox.load(c)
     assert VegBox.load(c) == VegBox(Т=4, М=0, К=3, Б=2, З=1)
+    assert vb.save() == c
 
