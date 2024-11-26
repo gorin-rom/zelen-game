@@ -55,7 +55,6 @@ class GameState:
         n = len(self.players)
         self._current_player = (self._current_player + 1) % n
 
-    '''def deal_cards(self, all_cards, num):
-        for player in self.players:
-            player_cards = [Deck.draw_card(0) for _ in range(num)]
-        self.cards = all_cards'''
+    def deal_cards(self):
+        num = len(self.players)
+        self.cards = [self.deck.draw_card() for _ in range(num + 1)]

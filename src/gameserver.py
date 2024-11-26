@@ -1,4 +1,5 @@
 import inspect
+import sys
 from random import randint
 from src.card import Card
 from src.deck import Deck
@@ -36,14 +37,15 @@ class GameServer:
 
     def new_game(self, player_types: dict):
         deck = Deck(cards=None)
+        deck = deck.shuffle()
         price = VegBox()
-        self.gamestate = GameState(list(player_types.keys()), deck, price)
+        self.gamestate = GameState(list(player_types.keys()), deck, price, cards=[])
 
     def run(self):
-        current_phase = GamePhase.CHOOSE_CARD
-        while current_phase != GamePhase.GAME_END:
+        current_phase = GamePhase.BEGIN_ROUND
+        while current_phase != GamePhase.DECLARE_WINNER:
             phases = {
-                GamePhase.BEGIN_ROUND: self.new_game,
+                GamePhase.BEGIN_ROUND: self.begin_round_phase,
                 GamePhase.CHOOSE_CARD: self.choose_card_phase,
                 GamePhase.NEXT_PLAYER: self.next_player_phase,
                 GamePhase.END_ROUND: self.end_round_phase,
@@ -52,10 +54,9 @@ class GameServer:
             current_phase = phases[current_phase]()
 
     def begin_round_phase(self) -> GamePhase:
-        player_count = self.request_player_count()
-        all_cards = Card.all_cards(None)
-        cards = [Deck.draw_card(all_cards) for _ in range(player_count + 1)]
-        self.gamestate.deal_cards(all_cards, self.gamestate.players + 1)
+        self.gamestate.deal_cards()
+        print(self.gamestate.cards)
+
         return GamePhase.CHOOSE_CARD
 
     def choose_card_phase(self) -> GamePhase:
