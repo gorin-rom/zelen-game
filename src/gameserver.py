@@ -32,18 +32,18 @@ class GameServer:
         for _ in range(player_count):
             name, kind = cls.request_player()
             player = Player(name, Hand())
-            player_types[player] = kind
+            player_types[player] = kind.lower()
         return player_types
 
     def new_game(self, player_types: dict):
         deck = Deck(cards=None)
-        deck = deck.shuffle()
+        deck.shuffle()
         price = VegBox()
         self.gamestate = GameState(list(player_types.keys()), deck, price, cards=[])
 
     def run(self):
         current_phase = GamePhase.BEGIN_ROUND
-        while current_phase != GamePhase.DECLARE_WINNER:
+        while current_phase != GamePhase.GAME_END:
             phases = {
                 GamePhase.BEGIN_ROUND: self.begin_round_phase,
                 GamePhase.CHOOSE_CARD: self.choose_card_phase,
@@ -55,31 +55,76 @@ class GameServer:
 
     def begin_round_phase(self) -> GamePhase:
         self.gamestate.deal_cards()
-        print(self.gamestate.cards)
-
+        print(f"******* {self.gamestate.iround}-й раунд *******")
+        print(f"Цена: {self.gamestate.price.save()}")
         return GamePhase.CHOOSE_CARD
 
     def choose_card_phase(self) -> GamePhase:
-        pass
+        current_player = self.gamestate.current_player()
+        print(f"=== Ход игрока {current_player.name} ===")
+        print(f"Карты: {self.gamestate.cards}")
+        while True:
+            if self.player_types[current_player] == "human":
+                try:
+                    num = int(input(f"{current_player.name}, какую карту тянем?: "))
+                    if GameState.MIN_PLAYABLE_CARD <= num <= len(self.gamestate.cards):
+                        choose_card = self.gamestate.cards[num - 1]
+                        self.gamestate.cards.remove(choose_card)
+                        current_player.hand.cards.append(choose_card)
+                        print(f"Игрок {current_player.name} выбрал {choose_card}")
+                        break
+                    else:
+                        print("Некорректный ввод. Пожалуйста, выберите номер карты из доступных.")
+                except ValueError:
+                    print("Пожалуйста, введите корректное число.")
+
+            elif self.player_types[current_player] == "bot":
+                choose_card = self.gamestate.cards[randint(0, len(self.gamestate.cards) - 1)]
+                self.gamestate.cards.remove(choose_card)
+                current_player.hand.cards.append(choose_card)
+                print(f"Игрок {current_player.name} (бот) выбрал {choose_card}")
+                break
+        return GamePhase.NEXT_PLAYER
 
     def next_player_phase(self) -> GamePhase:
-        if GameState.iround == GameState.MAX_ROUND:
-            return GamePhase.DECLARE_WINNER
-        self.gamestate.next_player()
-        print(f"=== {self.gamestate.current_player()}'s turn")
-        return GamePhase.CHOOSE_CARD
+        if len(self.gamestate.cards) == GameState.MIN_PLAYABLE_CARD:
+            print(f"На столе осталась карта {self.gamestate.cards[0]}")
+            return GamePhase.END_ROUND
+        else:
+            self.gamestate.next_player()
+            return GamePhase.CHOOSE_CARD
 
     def end_round_phase(self) -> GamePhase:
-        pass
+        print(f"--- {self.gamestate.iround}-й раунд завершён---\n")
+
+        remaining_card = self.gamestate.cards[0]
+        self.gamestate.price.add(remaining_card)
+
+        self.gamestate.iround += 1
+        self.gamestate.cards.clear()  # Очистка стола от карт после раунда
+
+        # Если раунд достиг максимального значения, конец игры
+        if self.gamestate.iround > GameState.MAX_ROUND:
+            print(f'*** Итоговая цена ***\n {self.gamestate.price.save()}')
+            return GamePhase.DECLARE_WINNER
+
+        return GamePhase.BEGIN_ROUND  # Переход к следующему раунду (по умолчанию)
 
     def declare_winner_phase(self) -> GamePhase:
         max_score = 0
         winner = None
+        player_score = {}
         for player in self.gamestate.players:
-            if player.hand.score > max_score:
-                max_score = player.hand.score
+            current_score = sum(card.score(self.gamestate.price) for card in player.hand.cards)
+            player_score[player.name] = current_score
+            if current_score > max_score:
+                max_score = current_score
                 winner = player
-        print(f"{winner.name} is the winner!")
+        for name, score in player_score.items():
+            print(f"{name}: {score} очков")
+        if winner:
+            print(f"{winner.name} - ПОБЕДИТЕЛЬ: {max_score} очков!")
+
         return GamePhase.GAME_END
 
     @staticmethod
@@ -109,7 +154,6 @@ class GameServer:
             if kind.lower() in ['human', 'bot']:  # Проверка на корректный ввод типа игрока
                 break
             print("Допустимые типы игроков: 'human' или 'bot'")
-
         return name, kind
 def __main__():
     player_types = GameServer.get_players()
