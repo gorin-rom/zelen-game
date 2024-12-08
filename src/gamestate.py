@@ -1,4 +1,3 @@
-#class GameServer:
 from random import randint
 from src.card import Card
 from src.deck import Deck
@@ -10,13 +9,14 @@ class GameState:
     MAX_ROUND = 6
     MIN_PLAYERS = 2
     MAX_PLAYERS = 6
+    MIN_PLAYABLE_CARD = 1
     def __init__(self, players: list[Player], deck: Deck, price: VegBox, cards: list[Card], current_player: int = 0, iround: int = 1):
         self.players: list[Player] = players
         self.deck: Deck = deck
         self._current_player: int = current_player
         self.price = price
         self.cards: list[Card] = cards
-        self.iround = iround
+        self.iround: int = iround
 
     def current_player(self) -> Player:
         return self.players[self._current_player]
