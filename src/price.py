@@ -1,3 +1,4 @@
+import random
 from typing import Self
 from src.card import Card
 
@@ -8,7 +9,10 @@ class VegBox:
 
     def __init__(self, **kwargs):
         for v in self.VEGETABLES:
-            setattr(self, v, kwargs.get(v, 0))
+            if v not in kwargs:
+                setattr(self, v, random.randint(0, VegBox.MAX_PRICE))
+            else:
+                setattr(self, v, kwargs.get(v, 0))
         self.validate_vegetables(kwargs.keys())
         self.validate_values(kwargs.values())
 
