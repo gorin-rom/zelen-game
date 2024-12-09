@@ -72,9 +72,10 @@ class GameServer:
         while True:
             if self.player_types[current_player] == "human":
                 try:
-                    num = int(input(f"{current_player.name}, какую карту тянем?: "))
-                    if GameState.MIN_PLAYABLE_CARD <= num <= len(self.gamestate.cards):
-                        choose_card = self.gamestate.cards[num - 1]
+                    card = input(f"{current_player.name}, какую карту тянем?: ")
+                    card = Card.load(card)
+                    if card in self.gamestate.cards:
+                        choose_card = card
                         self.gamestate.cards.remove(choose_card)
                         current_player.hand.cards.append(choose_card)
                         print(f"Игрок {current_player.name} выбрал {choose_card}")
@@ -169,5 +170,7 @@ def __main__():
 
 
 if __name__ == "__main__":
+    from random import seed
+    seed(7)
     __main__()
 
